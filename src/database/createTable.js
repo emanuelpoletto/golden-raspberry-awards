@@ -1,5 +1,5 @@
-export const createTable = async (db) => {
-  const result = await db.run(`
+const createTable = async (db) => {
+  await db.run(`
     CREATE TABLE IF NOT EXISTS movies (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       year INTEGER NOT NULL,
@@ -9,4 +9,6 @@ export const createTable = async (db) => {
       winner BOOLEAN NOT NULL DEFAULT FALSE
     );
   `);
-}
+};
+
+export default createTable;

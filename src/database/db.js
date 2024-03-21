@@ -1,7 +1,7 @@
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
 
-export class DB {
+class DB {
   static #db;
 
   constructor(verbose = false) {
@@ -26,3 +26,5 @@ export class DB {
     return DB.#db;
   }
 }
+
+export default DB;

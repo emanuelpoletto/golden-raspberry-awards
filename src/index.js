@@ -8,7 +8,7 @@ import startServer from './api/server.js';
 const filePath = getFilePath();
 const dataRows = await readFile(filePath);
 
-const db = await initDb('createSchema');
+const db = await initDb({ runCreateSchema: true });
 await seedDb({ db, dataRows });
 
 startServer(router);

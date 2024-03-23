@@ -1,11 +1,12 @@
 import DB from './db.js';
-import createTable from './createTable.js';
+import createSchema from './createSchema.js';
 
-const initDb = async (createSchema = false) => {
-  const verbose = process.env.NODE_ENV === 'test';
+const initDb = async (options = { runCreateSchema: false }) => {
+  const { runCreateSchema } = options;
+  const verbose = process.env.LOG_LEVEL?.toLowerCase() === 'debug';
   const db = await DB.getInstance(verbose);
-  if (createSchema) {
-    await createTable(db);
+  if (runCreateSchema) {
+    await createSchema(db);
   }
   return db;
 };

@@ -9,6 +9,10 @@
         "sourceType": "module"
     },
     "rules": {
-        "import/extensions": ["error", "ignorePackages"]
+        "import/extensions": ["error", "ignorePackages"],
+        "no-plusplus": "off",
+        "no-restricted-syntax": ["error", "ForInStatement"],
+        "no-continue": "off",
+        "no-await-in-loop": "off"
     }
 }

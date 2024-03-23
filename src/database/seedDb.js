@@ -1,7 +1,12 @@
+import { DEFAULT_SEPARATOR, IGNORE_FIRST_ROW } from '../constants.js';
+
 const seedDb = async ({
-  db, dataRows, isFirstRowAHeader = true, separator = ';',
+  db,
+  dataRows,
+  ignoreFirstRow = IGNORE_FIRST_ROW,
+  separator = DEFAULT_SEPARATOR,
 }) => {
-  let skipRow = isFirstRowAHeader;
+  let skipRow = ignoreFirstRow;
 
   for (const row of dataRows) {
     if (row.trim() === '') {

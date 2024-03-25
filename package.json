@@ -5,8 +5,11 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node .",
-    "dev": "nodemon .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "LOG_LEVEL=debug nodemon .",
+    "test": "NODE_ENV=test node test/runTests.js",
+    "test:debug": "LOG_LEVEL=debug NODE_ENV=test node test/runTests.js",
+    "test:watch": "NODE_ENV=test node --watch test/runTests.js",
+    "test:debug:watch": "LOG_LEVEL=debug NODE_ENV=test node --watch test/runTests.js"
   },
   "type": "module",
   "keywords": [],
@@ -19,6 +22,7 @@
     "nodemon": "^3.1.0"
   },
   "dependencies": {
+    "glob": "^10.3.10",
     "sqlite": "^5.1.1",
     "sqlite3": "^5.1.7"
   }

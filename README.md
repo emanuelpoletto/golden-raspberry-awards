@@ -8,12 +8,11 @@ The main codebase is in the `src` directory. Here's a brief overview of the stru
 
 - `src/api/routes/`: This directory contains the route handlers for the API. Each file corresponds to a different endpoint.
   - `getAwards.js`: This file handles requests to the `/awards` endpoint.
-  - `getAwardsIntervals.js`: This file handles requests to the `/awards-intervals` endpoint.
+  - `getAwardsIntervals.js`: This file handles requests to the `/awards/intervals` endpoint.
 - `src/constants.js`: This file contains various constants used throughout the project.
 - `src/index.js`: This is the entry point of the application.
 - `src/database/*`: Database related stuff. The application is using an in memory instance of `SQLite` as database.
 - `src/fileSystem/*`: File system-related functionalities. The application reads data from a `csv` file on start automatically.
-- `src/util/*`: Common shared functions.
 
 Every time the application is started, it reads data from a given `csv` file and properly seeds the database with that data so it is available to be retrieved through the API endpoints.
 
@@ -23,6 +22,8 @@ To install the project dependencies, run the following command in your terminal:
 ```sh
 npm install
 ```
+For the sake of simplicity, there are only 3 dependencies: `sqlite3`, `sqlite`, and `glob`.
+No external frameworks and libs have been used neither for the API nor the tests.
 
 ## Running the Application
 
@@ -46,12 +47,13 @@ The application will start, read the given (or default) file, seed the database,
 You can make requests to the following endpoints:
 
 - `GET /awards`: Fetches a list of awards limit by `10` by default. You can use both `offset` and `limit` query parameters to manage pagination as needed. Example:
+
+Request:
 ```js
-// Request:
 GET /awards?limit=2
 ```
+Response:
 ```json
-// Response:
 [
   {
     "year": 1980,
@@ -69,12 +71,13 @@ GET /awards?limit=2
 ```
 
 - `GET /awards/intervals`: Calculates and returns minimum and maximum intervals between awards won by producers. Example:
+
+Request:
 ```js
-// Request:
 GET /awards/intervals
 ```
+Response:
 ```json
-// Response:
 {
   "min": [
     {

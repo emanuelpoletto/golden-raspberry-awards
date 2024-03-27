@@ -1,74 +1,41 @@
 import initDb from '../../database/initDb.js';
 
 const getIntervals = (winners) => {
-  const intervals = {};
+  const intervals = {
+    min: [],
+    max: [],
+  };
+  const records = {};
 
   for (const { year, producer } of winners) {
-    if (!intervals[producer]) {
-      intervals[producer] = {
-        minInterval: Infinity,
-        maxInterval: -Infinity,
-        prevYear: year,
+    if (!records[producer]) {
+      records[producer] = {
+        producer,
+        interval: 0,
+        previousWin: year,
+        followingWin: 0,
       };
-    } else {
-      const interval = year - intervals[producer].prevYear;
-      if (interval < intervals[producer].minInterval) {
-        intervals[producer].minInterval = interval;
-        intervals[producer].minPrevious = intervals[producer].prevYear;
-        intervals[producer].minFollowing = year;
-      }
-      if (interval > intervals[producer].maxInterval) {
-        intervals[producer].maxInterval = interval;
-        intervals[producer].maxPrevious = intervals[producer].prevYear;
-        intervals[producer].maxFollowing = year;
-      }
-      intervals[producer].prevYear = year;
+      continue;
     }
+    const record = { ...records[producer] };
+    record.followingWin = year;
+    record.interval = record.followingWin - record.previousWin;
+    if (intervals.min[0]?.interval === record.interval) {
+      intervals.min.push({ ...record });
+    }
+    if (intervals.max[0]?.interval === record.interval) {
+      intervals.max.push({ ...record });
+    }
+    if (!intervals.min.length || intervals.min[0]?.interval > record.interval) {
+      intervals.min = [{ ...record }];
+    }
+    if (!intervals.max.length || intervals.max[0]?.interval < record.interval) {
+      intervals.max = [{ ...record }];
+    }
+    record.previousWin = year;
+    records[producer] = record;
   }
-
-  let minIntervals = [];
-  let maxIntervals = [];
-
-  Object.entries(intervals).forEach(([producer, {
-    minInterval,
-    maxInterval,
-    minPrevious,
-    minFollowing,
-    maxPrevious,
-    maxFollowing,
-  }]) => {
-    const minRecord = {
-      producer,
-      interval: minInterval,
-      previousWin: minPrevious,
-      followingWin: minFollowing,
-    };
-
-    if (minInterval !== Infinity) {
-      if (!minIntervals.length || minIntervals[0].interval > minInterval) {
-        minIntervals = [minRecord];
-      } else if (minIntervals[0].interval === minInterval) {
-        minIntervals.push(minRecord);
-      }
-    }
-
-    const maxRecord = {
-      producer,
-      interval: maxInterval,
-      previousWin: maxPrevious,
-      followingWin: maxFollowing,
-    };
-
-    if (maxInterval !== -Infinity) {
-      if (!maxIntervals.length || maxIntervals[0].interval < maxInterval) {
-        maxIntervals = [maxRecord];
-      } else if (maxIntervals[0].interval === maxInterval) {
-        maxIntervals.push(maxRecord);
-      }
-    }
-  });
-
-  return { min: minIntervals, max: maxIntervals };
+  return intervals;
 };
 
 const getAwardsIntervalsRoute = async (req, res) => {

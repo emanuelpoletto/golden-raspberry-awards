@@ -8,12 +8,16 @@ import {
 import assert from 'node:assert';
 import getAwardsRoute from '../../../src/api/routes/getAwards.js';
 import { DEFAULT_LIMIT } from '../../../src/constants.js';
+import getFilePath from '../../../src/fileSystem/getFilePath.js';
+import readFile from '../../../src/fileSystem/readFile.js';
 import initDb from '../../../src/database/initDb.js';
 import seedDb from '../../../src/database/seedDb.js';
-import mockDataRows from '../../mocks/dataRows.mock.js';
 import createSchema from '../../../src/database/createSchema.js';
 
 const ROUTE_PATH = '/awards';
+
+const filePath = getFilePath();
+const dataRows = await readFile(filePath);
 
 const mockReq = {
   url: ROUTE_PATH,
@@ -37,7 +41,7 @@ describe('getAwardsRoute', () => {
     db = await initDb();
     await db.open();
     await createSchema(db);
-    await seedDb({ db, dataRows: mockDataRows });
+    await seedDb({ db, dataRows });
   });
 
   beforeEach(() => {
